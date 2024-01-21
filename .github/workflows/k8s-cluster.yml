@@ -1,0 +1,66 @@
+name: Create MOSIP Cluster
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  create-rke-cluster:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        node: [cluster]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python and install Ansible
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Ansible dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+
+      - name: Configure SSH keys for password-less SSH connection.
+        run: |
+          echo "$PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
+          ssh-add ssh_key
+
+      - name: Generate public key from private key
+        run: |
+          ssh-keygen -y -f ssh_key > public_key.pub
+          ansible -i /config/hosts.ini -m authorized_key -a "user=root key={{ lookup('file', 'public_key.pub') }}" cluster
+
+#     - name: Run Ansible playbook to Open ports on each of the nodes.
+#       run: |
+#         ansible-playbook -i ./config/hosts.ini ./playbooks/ports.yaml
+
+      - name: Run Ansible playbook to perform Environment Check and setup.
+        run: |
+          ansible-playbook -i ./config/hosts.ini ./playbooks/env-check-setup.yaml          
+
+      - name: Run Ansible playbook to Install docker on all nodes.
+        run: |
+          ansible-playbook -i ./config/hosts.ini ./playbooks/docker.yaml
+
+      - name: Build Docker image
+        run: docker build -t mosip-rke-image .
+
+      - name: Run RKE in Docker container
+        run: docker run -v $(pwd):/config mosip-rke-image
+
+      - name: Commit changes to cluster repository
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add -A
+          git commit -m "Update RKE state and kubeconfig files"
+          git push https://${{ secrets.CLUSTER_REPO_ACCESS }}@github.com/Mohanraj209/cluster main
