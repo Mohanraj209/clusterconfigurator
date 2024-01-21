@@ -47,17 +47,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible
 
-      - name: Configure SSH keys for password-less SSH connection.
-        run: |
-          echo "$PRIVATE_KEY" > ssh_key
-          chmod 600 ssh_key
-          ssh-add ssh_key
-
-      - name: Generate public key from private key
-        run: |
-          ssh-keygen -y -f ssh_key > public_key.pub
-          sudo ssh ansible -i /config/hosts.ini -m authorized_key -a "user=ubuntu key={{ lookup('file', 'public_key.pub') }}" cluster
-
 #     - name: Run Ansible playbook to Open ports on each of the nodes.
 #       run: |
 #         ansible-playbook -i ./config/hosts.ini ./playbooks/ports.yaml
