@@ -53,7 +53,8 @@ jobs:
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
-          sudo ansible-playbook -i ./config/hosts.ini ./playbooks/env-check-setup.yaml          
+          ANSIBLE_PATH=$(which ansible-playbook)
+          sudo $ANSIBLE_PATH -i ./config/hosts.ini ./playbooks/env-check-setup.yaml
 
       - name: Run Ansible playbook to Install docker on all nodes.
         run: |
