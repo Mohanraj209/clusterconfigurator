@@ -18,6 +18,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install WireGuard
+        run: sudo apt-get install -y wireguard
+
+      - name: Configure WireGuard
+        run: |
+          echo "[Interface]
+          Address = 10.13.13.29
+          SaveConfig = true
+          PrivateKey = SM/3y9sjDfxMsXj+5YirFnm2tXxK0ZR2A8QHUtilpkw=
+          ListenPort = 51820
+
+          [Peer]
+          PublicKey = fCCuRocmGjP/Fyp0use7WYJQM8sOLP1GNhun6QnW5Aw=
+          AllowedIPs = 172.31.0.0/16
+          Endpoint = 3.7.248.153:51820" | sudo tee /etc/wireguard/wg0.conf
+
+      - name: Start WireGuard
+        run: sudo wg-quick up wg0
+
       - name: Set up Python and install Ansible
         uses: actions/setup-python@v2
         with:
@@ -37,7 +56,7 @@ jobs:
       - name: Generate public key from private key
         run: |
           ssh-keygen -y -f ssh_key > public_key.pub
-          ansible -i /config/hosts.ini -m authorized_key -a "user=root key={{ lookup('file', 'public_key.pub') }}" cluster
+          sudo ssh ansible -i /config/hosts.ini -m authorized_key -a "user=ubuntu key={{ lookup('file', 'public_key.pub') }}" cluster
 
 #     - name: Run Ansible playbook to Open ports on each of the nodes.
 #       run: |
@@ -45,17 +64,17 @@ jobs:
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
-          ansible-playbook -i ./config/hosts.ini ./playbooks/env-check-setup.yaml          
+          sudo ansible-playbook -i ./config/hosts.ini ./playbooks/env-check-setup.yaml          
 
       - name: Run Ansible playbook to Install docker on all nodes.
         run: |
-          ansible-playbook -i ./config/hosts.ini ./playbooks/docker.yaml
+          sudo ansible-playbook -i ./config/hosts.ini ./playbooks/docker.yaml
 
       - name: Build Docker image
-        run: docker build -t mosip-rke-image .
+        run: sudo docker build -t mosip-rke-image .
 
       - name: Run RKE in Docker container
-        run: docker run -v $(pwd):/config mosip-rke-image
+        run: sudo docker run -v $(pwd):/config mosip-rke-image
 
       - name: Commit changes to cluster repository
         run: |

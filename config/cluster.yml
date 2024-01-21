@@ -9,7 +9,7 @@ nodes:
       - worker
       - etcd
     hostname_override: node1
-    user: root
+    user: ubuntu
     docker_socket: /var/run/docker.sock
     ssh_key: ""
     ssh_key_path: ${{ secrets.CLUSTER_PRIVATE_KEY }}
@@ -24,7 +24,7 @@ nodes:
       - worker
       - etcd
     hostname_override: node2
-    user: root
+    user: ubuntu
     docker_socket: /var/run/docker.sock
     ssh_key: ""
     ssh_key_path: ${{ secrets.CLUSTER_PRIVATE_KEY }}
