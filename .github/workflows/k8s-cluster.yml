@@ -34,7 +34,7 @@ jobs:
           Address = 10.13.13.29
           SaveConfig = true
           PrivateKey = SM/3y9sjDfxMsXj+5YirFnm2tXxK0ZR2A8QHUtilpkw=
-          ListenPort = 51820
+          ListenPort = 51821
 
           [Peer]
           PublicKey = fCCuRocmGjP/Fyp0use7WYJQM8sOLP1GNhun6QnW5Aw=
