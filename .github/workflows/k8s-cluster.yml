@@ -54,6 +54,16 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.74 exit
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.109 exit
 
+      - name: Generate SSH Key Pair
+        id: ssh_key
+        run: |
+          ssh-keygen -t rsa -b 4096 -C "actions-runner-key" -f runner_key -N ""
+          echo "PUBLIC_KEY=$(cat runner_key.pub)" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Print Public Key
+        run: echo "${{ env.PUBLIC_KEY }}"
+
       - name: SSH into the Servers and Add Public Key
         run: |
           while IFS= read -r line; do
