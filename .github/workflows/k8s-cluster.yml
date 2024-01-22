@@ -52,8 +52,6 @@ jobs:
           echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ssh_key
           chmod 600 ssh_key
           ssh-keygen -l -f ssh_key
-          ssh -o StrictHostKeyChecking=yes -i ssh_key ubuntu@172.31.1.74 exit
-          ssh -o StrictHostKeyChecking=yes -i ssh_key ubuntu@172.31.1.109 exit
 
       - name: Generate SSH Key Pair
         id: ssh_key
@@ -74,6 +72,11 @@ jobs:
 
             echo "${{ env.PUBLIC_KEY }}" | ssh -o StrictHostKeyChecking=no -i $ansible_private_key $ansible_user@$ansible_host 'cat >> ~/.ssh/authorized_keys'
           done
+
+      - name: SSH into the Servers
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@3.7.254.76 exit
+          ssh -i ~/.ssh/id_rsa ubuntu@13.232.234.78 exit
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
