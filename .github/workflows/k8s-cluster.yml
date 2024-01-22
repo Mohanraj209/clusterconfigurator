@@ -35,8 +35,9 @@ jobs:
           Endpoint = 3.7.248.153:51820" | sudo tee /etc/wireguard/wg0.conf
 
       - name: Start WireGuard
-        run: sudo wg-quick up wg0
-             sudo ufw status
+        run: | 
+          sudo wg-quick up wg0
+          sudo ufw status
 
       - name: Set up Python and install Ansible
         uses: actions/setup-python@v2
