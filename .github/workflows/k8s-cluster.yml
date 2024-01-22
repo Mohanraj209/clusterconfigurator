@@ -73,6 +73,17 @@ jobs:
             echo "${{ env.PUBLIC_KEY }}" | ssh -o StrictHostKeyChecking=no -i $ansible_private_key $ansible_user@$ansible_host 'cat >> ~/.ssh/authorized_keys'
           done
 
+      - name: Capture host keys
+        id: host-keys
+        run: |
+          echo "copied_host_key_1=$(ssh-keyscan -H 3.7.254.76)" >> $GITHUB_ENV
+          echo "copied_host_key_2=$(ssh-keyscan -H 13.232.234.78)" >> $GITHUB_ENV
+
+      - name: Append host keys to known_hosts
+        run: |
+          echo "$copied_host_key_1" >> /home/runner/.ssh/known_hosts
+          echo "$copied_host_key_2" >> /home/runner/.ssh/known_hosts
+
       - name: SSH into the Servers
         run: |
           ls
