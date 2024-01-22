@@ -76,8 +76,8 @@ jobs:
       - name: SSH into the Servers
         run: |
           ls
-          ssh -i ~/.ssh/id_rsa ubuntu@3.7.254.76 exit
-          ssh -i ~/.ssh/id_rsa ubuntu@13.232.234.78 exit
+          ssh -i runner_key ubuntu@3.7.254.76 exit
+          ssh -i runner_key ubuntu@13.232.234.78 exit
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
