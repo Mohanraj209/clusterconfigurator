@@ -83,12 +83,14 @@ jobs:
         run: |
           echo "$copied_host_key_1" >> /home/runner/.ssh/known_hosts
           echo "$copied_host_key_2" >> /home/runner/.ssh/known_hosts
+          cat /home/runner/.ssh/known_hosts
 
       - name: SSH into the Servers
         run: |
           ls
-          ssh -i runner_key ubuntu@3.7.254.76 exit
-          ssh -i runner_key ubuntu@13.232.234.78 exit
+          chmod 600 runner_key
+          ssh -i runner_key ubuntu@3.7.254.76 'echo "Hello from Node1"' exit
+          ssh -i runner_key ubuntu@13.232.234.78 'echo "Hello from Node2"' exit
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
