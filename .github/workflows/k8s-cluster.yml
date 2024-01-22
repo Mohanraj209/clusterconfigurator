@@ -53,19 +53,20 @@ jobs:
         run: |
           echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ssh_key
           chmod 600 ssh_key
+          ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.74 exit
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.109 exit
 
-      - name: Generate public key from private key
-        run: |
-          ssh-keygen -y -f ssh_key > public_key.pub
-          # Generate and print GitHub Runner public key
-          echo "::set-output name=runner-public-key::$(cat public_key.pub)"          
+#      - name: Generate public key from private key
+#        run: |
+#          ssh-keygen -y -f ssh_key > public_key.pub
+#         # Generate and print GitHub Runner public key
+#          echo "::set-output name=runner-public-key::$(cat public_key.pub)"
 
-      - name: Update Known Hosts on Remote Hosts
-        run: |
-          ansible-playbook -i ./config/hosts.ini -e "runner_public_key=${{ steps.generate-key.outputs.runner-public-key }}" ./playbooks/passwordless-ssh.yaml
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.CLUSTER_PRIVATE_KEY }}
+#      - name: Update Known Hosts on Remote Hosts
+#        run: |
+#          ansible-playbook -i ./config/hosts.ini -e "runner_public_key=${{ steps.generate-key.outputs.runner-public-key }}" ./playbooks/passwordless-ssh.yaml
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.CLUSTER_PRIVATE_KEY }}
 
 #     - name: Run Ansible playbook to Open ports on each of the nodes.
 #       run: |
