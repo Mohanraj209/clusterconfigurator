@@ -47,13 +47,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible
 
-      - name: Configure SSH keys for password-less SSH connection.
-        run: |
-          echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ssh_key
-          chmod 600 ssh_key
-          ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.74 exit
-          ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.109 exit
-
       - name: Update known_hosts
         run: |
           mkdir -p ~/.ssh
