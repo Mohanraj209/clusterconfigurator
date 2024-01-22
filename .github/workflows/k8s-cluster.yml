@@ -36,6 +36,7 @@ jobs:
 
       - name: Start WireGuard
         run: sudo wg-quick up wg0
+             sudo ufw status
 
       - name: Set up Python and install Ansible
         uses: actions/setup-python@v2
