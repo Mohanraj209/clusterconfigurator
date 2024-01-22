@@ -54,6 +54,14 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.74 exit
           ssh -o StrictHostKeyChecking=no -i ssh_key ubuntu@172.31.1.109 exit
 
+      - name: Update known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 172.31.1.74 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 172.31.1.109 >> ~/.ssh/known_hosts
+
       - name: Generate SSH Key Pair
         id: ssh_key
         run: |
