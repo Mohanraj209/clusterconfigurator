@@ -58,11 +58,11 @@ jobs:
       - name: Update Known Hosts on Remote Hosts
         run: |
           # Use Ansible or another method to update known_hosts on remote hosts
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key
+          echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ssh_key
           chmod 600 ssh_key
           ansible-playbook -i ./config/hosts.ini -e "runner_public_key=${{ steps.generate-key.outputs.runner-public-key }}" ./playbooks/passwordless-ssh.yaml
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.CLUSTER_PRIVATE_KEY }}
 
 #     - name: Run Ansible playbook to Open ports on each of the nodes.
 #       run: |
