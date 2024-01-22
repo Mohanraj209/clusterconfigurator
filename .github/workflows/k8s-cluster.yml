@@ -45,6 +45,8 @@ jobs:
         run: |
           sudo wg-quick up wg0
           sudo wg show wg0
+          sudo systemctl enable wg-quick@wg0
+          sudo systemctl start wg-quick@wg0
           sudo systemctl status wg-quick@wg0
 
       - name: Set up Python and install Ansible
