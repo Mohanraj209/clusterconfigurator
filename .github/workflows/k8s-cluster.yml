@@ -39,7 +39,7 @@ jobs:
           [Peer]
           PublicKey = fCCuRocmGjP/Fyp0use7WYJQM8sOLP1GNhun6QnW5Aw=
           AllowedIPs = 172.31.0.0/16
-          Endpoint = 3.7.248.153:51820" | sudo tee /etc/wireguard/wg0.conf
+          Endpoint = 3.7.248.153:51821" | sudo tee /etc/wireguard/wg0.conf
 
       - name: Start WireGuard
         run: |
