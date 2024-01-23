@@ -2,8 +2,12 @@
 
 # Entry point script to run RKE
 
-# Update PATH to include /usr/local/bin
-export PATH=$PATH:/usr/local/bin
+echo "Current PATH: $PATH"
+echo "Contents of /usr/local/bin:"
+ls -l /usr/local/bin
+
+# Run RKE (assuming cluster.yml is in the same directory as Dockerfile)
+/usr/local/bin/rke up --config /config/cluster.yml
 
 # Run RKE
 rke up --config /config/cluster.yml
