@@ -62,65 +62,23 @@ jobs:
         run: |
           echo "${{ secrets.CLUSTER_PRIVATE_KEY }}" > ssh_key
           chmod 600 ssh_key
-          ssh-keygen -l -f ssh_key
-
-      - name: Generate SSH Key Pair
-        id: ssh_key
-        run: |
-          ssh-keygen -t rsa -b 4096 -C "actions-runner-key" -f runner_key -N ""
-          echo "PUBLIC_KEY=$(cat runner_key.pub)" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Print Public Key
-        run: echo "${{ env.PUBLIC_KEY }}"
-
-      - name: SSH into the Servers and Add Public Key
-        run: |
-          for node in node1 node2; do
-            ansible_user=$(ansible-inventory -i ./config/hosts.ini --host $node --yaml | yq e '.ansible_user' -)
-            ansible_host=$(ansible-inventory -i ./config/hosts.ini --host $node --yaml | yq e '.ansible_host' -)
-            ansible_private_key=ssh_key
-
-            echo "${{ env.PUBLIC_KEY }}" | ssh -o StrictHostKeyChecking=no -i $ansible_private_key $ansible_user@$ansible_host 'cat >> ~/.ssh/authorized_keys'
-          done
-
-      - name: Capture host keys
-        id: host-keys
-        run: |
-          echo "copied_host_key_1=$(ssh-keyscan -H 3.7.254.76)" >> $GITHUB_ENV
-          echo "copied_host_key_2=$(ssh-keyscan -H 13.232.234.78)" >> $GITHUB_ENV
-
-      - name: Append host keys to known_hosts
-        run: |
-          echo "$copied_host_key_1" >> /home/runner/.ssh/known_hosts
-          echo "$copied_host_key_2" >> /home/runner/.ssh/known_hosts
-          cat /home/runner/.ssh/known_hosts
-
-      - name: SSH into the Servers
-        run: |
-          ls
-          pwd
-          chmod 600 runner_key
-          ssh -i runner_key ubuntu@3.7.254.76 'echo "Hello from Node1"' exit
-          ssh -i runner_key ubuntu@13.232.234.78 'echo "Hello from Node2"' exit
 
       - name: Set ANSIBLE_HOST_KEY_CHECKING to False
         run: echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> $GITHUB_ENV
 
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
-          ANSIBLE_PATH=$(which ansible-playbook)
           ansible-playbook -i ./config/hosts.ini ./playbooks/env-check-setup.yaml
 
       - name: Run Ansible playbook to Install docker on all nodes.
         run: |
-          sudo ansible-playbook -i ./config/hosts.ini ./playbooks/docker.yaml
+          ansible-playbook -i ./config/hosts.ini ./playbooks/docker.yaml
 
       - name: Build Docker image
-        run: sudo docker build -t mosip-rke-image .
+        run: docker build -t mosip-rke-image .
 
       - name: Run RKE in Docker container
-        run: sudo docker run -v $(pwd):/config mosip-rke-image
+        run: docker run -v $(pwd):/config mosip-rke-image
 
       - name: Commit changes to cluster repository
         run: |
