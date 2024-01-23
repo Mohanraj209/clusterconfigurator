@@ -10,6 +10,8 @@ RUN curl -LO https://github.com/rancher/rke/releases/download/v2.6.3/rke_linux-a
 
 # Copy entrypoint.sh from the build context into the image
 COPY entrypoint.sh /entrypoint.sh
+COPY cluster.yml /cluster.yml
+COPY hosts.ini hosts.ini
 
 # Make entrypoint.sh executable
 RUN chmod +x /entrypoint.sh
