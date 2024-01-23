@@ -115,7 +115,7 @@ jobs:
         run: docker build -t mosip-rke-image .
 
       - name: Run RKE in Docker container
-        run: docker run -v $(pwd):/config mosip-rke-image
+        run: docker run -v $(pwd):/rke mosip-rke-image
 
       - name: Commit changes to cluster repository
         run: |
