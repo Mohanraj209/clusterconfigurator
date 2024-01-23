@@ -33,7 +33,7 @@ jobs:
           echo "[Interface]
           Address = 10.13.13.34
           PrivateKey = ACn/6kNrLlGtIs5bz9jbnZHbPnLrUFD4cqDvC3IPHGw=
-          ListenPort = 51820
+          ListenPort = 51821
           [Peer]
           PublicKey = fCCuRocmGjP/Fyp0use7WYJQM8sOLP1GNhun6QnW5Aw=
           Endpoint = 3.7.248.153:51820
