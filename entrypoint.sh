@@ -5,6 +5,8 @@
 echo "Current PATH: $PATH"
 echo "Contents of /usr/local/bin:"
 ls -l /usr/local/bin
+# Print contents of /config directory
+ls -la /
 
 rke up --config cluster.yml
 
