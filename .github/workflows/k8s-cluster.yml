@@ -103,6 +103,9 @@ jobs:
           ssh -i runner_key ubuntu@3.7.254.76 'echo "Hello from Node1"' exit
           ssh -i runner_key ubuntu@13.232.234.78 'echo "Hello from Node2"' exit
 
+      - name: Set ANSIBLE_HOST_KEY_CHECKING to False
+        run: echo "export ANSIBLE_HOST_KEY_CHECKING=False" >> $GITHUB_ENV
+
       - name: Run Ansible playbook to perform Environment Check and setup.
         run: |
           ANSIBLE_PATH=$(which ansible-playbook)
