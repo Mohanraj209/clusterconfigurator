@@ -5,4 +5,5 @@
 # Run RKE
 rke up --config /rke/config/cluster.yml
 cd /rke
-ll
+ls -l
+
