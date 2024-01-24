@@ -4,7 +4,7 @@ FROM alpine:latest
 RUN apk --update --no-cache add bash curl jq
 
 # Install RKE
-RUN curl -LO https://github.com/rancher/rke/releases/download/v1.3.3/rke_linux-amd64 && \
+RUN curl -LO https://github.com/rancher/rke/releases/download/v1.4.10/rke_linux-amd64 && \
     chmod +x rke_linux-amd64 && \
     mv rke_linux-amd64 /usr/local/bin/rke
 
