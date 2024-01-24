@@ -97,7 +97,7 @@ jobs:
 
       - name: SSH into the Servers
         run: |
-          ls
+          ll
           pwd
           chmod 600 runner_key
           ssh -i runner_key ubuntu@3.7.254.76 'echo "Hello from Node1"' exit
