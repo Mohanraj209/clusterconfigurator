@@ -117,7 +117,7 @@ jobs:
       - name: Run RKE in Docker container
         run: docker run -v $(pwd):/rke mosip-rke-image
 
-      - name: Commit changes to cluster repository
+      - name: Commit changes to cluster repository.
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
