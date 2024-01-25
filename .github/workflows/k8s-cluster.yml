@@ -123,4 +123,4 @@ jobs:
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add -A
           git commit -m "Update RKE state and kubeconfig files"
-          git push https://${{ secrets.CLUSTER_REPO_ACCESS }}@github.com/Mohanraj209/cluster main
+          git push https://${{ secrets.CLUSTER_REPO_ACCESS }}@github.com/Mohanraj209/cluster master
