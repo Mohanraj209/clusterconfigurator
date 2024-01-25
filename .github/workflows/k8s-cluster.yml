@@ -118,7 +118,7 @@ jobs:
       - name: Run RKE in Docker container
         run: docker run -v $(pwd):/rke mosip-rke-image
 
-      - name: Commit changes to cluster repository
+      - name: Commit changes to cluster repository.
         env:
           PAT_TOKEN: ${{ secrets.CLUSTER_REPO_ACCESS }}
         run: |
